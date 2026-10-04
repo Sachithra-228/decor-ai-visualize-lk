@@ -1,0 +1,720 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  BUSINESS_OWNER
+  RESEARCHER
+  SUPERVISOR
+}
+
+enum ConsentVersion {
+  V1
+}
+
+enum District {
+  COLOMBO
+  GAMPAHA
+  KALUTARA
+}
+
+enum AreaType {
+  URBAN
+  SEMI_URBAN
+}
+
+enum BusinessFormat {
+  ONLINE
+  HOME_BASED_MANUFACTURER
+  MARKET_STALL
+  WORKSHOP_BASED_SELLER
+}
+
+enum AiAdoptionStatus {
+  AI_USER
+  NON_AI_USER
+}
+
+enum ProductCategory {
+  TABLE_ACCESSORIES
+  KITCHENWARE
+  FABRIC_INTERIOR_PRODUCTS
+  OTHER
+}
+
+enum SalesChannel {
+  FACEBOOK
+  INSTAGRAM
+  WHATSAPP
+  PHYSICAL_SHOP
+  MARKETPLACE
+  WORD_OF_MOUTH
+  OTHER
+}
+
+enum ProductType {
+  TABLE_RUNNER
+  PLACEMAT
+  CUSHION_COVER
+  CURTAIN
+  WALL_HANGING
+  TRAY
+  COASTER
+  MUG
+  KITCHEN_TOWEL
+  OTHER
+}
+
+enum Material {
+  COTTON
+  LINEN
+  WOOD
+  CERAMIC
+  COCONUT_SHELL
+  CLAY
+  CANE
+  OTHER
+}
+
+enum PatternStyle {
+  FLORAL
+  GEOMETRIC
+  ABSTRACT
+  MINIMAL
+  TRADITIONAL
+}
+
+enum RoomStyle {
+  MODERN
+  TRADITIONAL
+  BOHO
+  SCANDINAVIAN
+  TROPICAL
+  COLONIAL
+}
+
+enum CulturalMotif {
+  BATIK
+  KANDYAN_ART
+  DUMBARA_WEAVE
+  BEERALU_LACE
+  PALM_LEAF_OLA
+  LOTUS
+  ELEPHANT
+  SIGIRIYA_INSPIRED
+  OTHER
+}
+
+enum ImageProvider {
+  MOCK
+  OPENAI
+  REPLICATE
+  STABILITY
+}
+
+enum GenerationStatus {
+  QUEUED
+  RUNNING
+  SUCCEEDED
+  FAILED
+}
+
+enum ShareLinkPurpose {
+  DESIGN_APPROVAL
+  POST_DELIVERY_FEEDBACK
+}
+
+enum CustomerFeedbackType {
+  PRE_PRODUCTION
+  POST_DELIVERY
+}
+
+enum OrderStage {
+  BRIEF
+  DESIGNING
+  SENT_TO_CUSTOMER
+  APPROVED
+  IN_PRODUCTION
+  DELIVERED
+  CANCELLED
+}
+
+enum QuestionnaireStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum QuestionnaireKind {
+  PILOT
+  MAIN
+}
+
+enum QuestionType {
+  LIKERT_5
+  SINGLE_CHOICE
+  MULTIPLE_CHOICE
+  NUMBER
+  SHORT_TEXT
+  LONG_TEXT
+}
+
+enum Locale {
+  EN
+  SI
+  TA
+}
+
+enum ResponseStatus {
+  IN_PROGRESS
+  SUBMITTED
+}
+
+enum InterviewMode {
+  IN_PERSON
+  PHONE
+  ZOOM
+  WHATSAPP_CALL
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  SIGN_IN
+  EXPORT
+  WITHDRAW
+}
+
+model User {
+  id               String              @id @default(cuid())
+  name             String?
+  email            String              @unique
+  emailVerified    DateTime?
+  image            String?
+  passwordHash     String?
+  role             Role                @default(BUSINESS_OWNER)
+  accounts         Account[]
+  sessions         Session[]
+  consentRecords   ConsentRecord[]
+  participant      ParticipantProfile?
+  questionnaires   Questionnaire[]     @relation("QuestionnaireCreator")
+  auditLogs        AuditLog[]
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+
+  @@index([role])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model ConsentRecord {
+  id             String         @id @default(cuid())
+  userId         String
+  version        ConsentVersion @default(V1)
+  consentedAt    DateTime       @default(now())
+  consentTextHash String
+  userAgent      String?
+  ipHash         String?
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@index([userId, consentedAt])
+}
+
+model ParticipantProfile {
+  id                    String                  @id @default(cuid())
+  participantCode       String                  @unique
+  userId                String                  @unique
+  identityId            String?                 @unique
+  eligibilityScreening  EligibilityScreening?
+  businessProfile       BusinessProfile?
+  baselineMetrics       BaselineMetrics?
+  designProjects        DesignProject[]
+  questionnaireResponses QuestionnaireResponse[]
+  interviewOptIn        InterviewOptIn?
+  interviews            Interview[]
+  withdrawnAt           DateTime?
+  withdrawalReason      String?
+  user                  User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  identity              ParticipantIdentity?    @relation(fields: [identityId], references: [id], onDelete: SetNull)
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+
+  @@index([participantCode])
+}
+
+model ParticipantIdentity {
+  id                String              @id @default(cuid())
+  fullName          String?
+  phone             String?
+  email             String?
+  preferredContact  String?
+  participant       ParticipantProfile?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+}
+
+model EligibilityScreening {
+  id                    String             @id @default(cuid())
+  participantId         String             @unique
+  customizedHomeDecor   Boolean
+  employeeCount         Int
+  turnoverUnderLimit    Boolean
+  district              District
+  areaType              AreaType
+  businessFormats       BusinessFormat[]
+  aiAdoptionStatus      AiAdoptionStatus
+  eligible              Boolean
+  screenedAt            DateTime           @default(now())
+  participant           ParticipantProfile @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+}
+
+model BusinessProfile {
+  id                String             @id @default(cuid())
+  participantId     String             @unique
+  businessName      String?
+  productCategories ProductCategory[]
+  yearsInOperation  Int
+  salesChannels     SalesChannel[]
+  otherCategory     String?
+  otherSalesChannel String?
+  participant       ParticipantProfile @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+}
+
+model BaselineMetrics {
+  id                    String             @id @default(cuid())
+  participantId         String             @unique
+  averageRevisions      Float
+  daysToFinalizeDesign  Float
+  samplesPerOrder       Float
+  monthlyOrders         Float
+  participant           ParticipantProfile @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+}
+
+model DesignProject {
+  id                  String             @id @default(cuid())
+  participantId       String
+  customerAlias       String?
+  productType         ProductType
+  deadline            DateTime?
+  notes               String?
+  currentStage        OrderStage         @default(BRIEF)
+  physicalSamplesMade Int                @default(0)
+  materialWasteRs     Decimal            @default(0)
+  participant         ParticipantProfile @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  brief               CustomerBrief?
+  generations         Generation[]
+  feasibilityChecks   FeasibilityCheck[]
+  shareLinks          ShareLink[]
+  feedback            CustomerFeedback[]
+  revisionRounds      RevisionRound[]
+  order               Order?
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+
+  @@index([participantId, currentStage])
+  @@index([createdAt])
+}
+
+model CustomerBrief {
+  id             String           @id @default(cuid())
+  projectId      String           @unique
+  productType    ProductType
+  subtype        String?
+  dimensions     String?
+  materials      Material[]
+  colorPalette   String[]
+  patternStyle   PatternStyle?
+  roomStyle      RoomStyle?
+  culturalMotifs CulturalMotif[]
+  notes          String?
+  generatedPrompt String?
+  advancedPrompt String?
+  project        DesignProject    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  referenceImages ReferenceImage[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+}
+
+model ReferenceImage {
+  id              String        @id @default(cuid())
+  briefId         String
+  storageKey      String
+  url             String
+  originalName    String?
+  mimeType        String
+  sizeBytes       Int
+  brief           CustomerBrief @relation(fields: [briefId], references: [id], onDelete: Cascade)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([briefId])
+}
+
+model Generation {
+  id             String            @id @default(cuid())
+  projectId      String
+  provider       ImageProvider
+  prompt         String
+  parameters     Json
+  status         GenerationStatus  @default(QUEUED)
+  durationMs     Int?
+  errorMessage   String?
+  project        DesignProject     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  images         GeneratedImage[]
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  @@index([projectId, createdAt])
+  @@index([provider, status])
+}
+
+model GeneratedImage {
+  id             String              @id @default(cuid())
+  generationId   String
+  storageKey     String
+  url            String
+  width          Int?
+  height         Int?
+  seed           String?
+  selected       Boolean             @default(false)
+  generation     Generation          @relation(fields: [generationId], references: [id], onDelete: Cascade)
+  feasibilityChecks FeasibilityCheck[]
+  feedback       CustomerFeedback[]  @relation("FeedbackSelectedImage")
+  revisionRounds RevisionRound[]
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+
+  @@index([generationId])
+}
+
+model FeasibilityCheck {
+  id                    String         @id @default(cuid())
+  projectId             String
+  generatedImageId      String?
+  availableMaterials    Boolean
+  skillsAndEquipment    Boolean
+  estimatedCostRs       Decimal
+  estimatedProductionHours Float
+  changesNeeded         String?
+  rating                Int
+  project               DesignProject  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  generatedImage        GeneratedImage? @relation(fields: [generatedImageId], references: [id], onDelete: SetNull)
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+
+  @@index([projectId])
+}
+
+model ShareLink {
+  id           String           @id @default(cuid())
+  projectId    String
+  token        String           @unique
+  purpose      ShareLinkPurpose
+  expiresAt    DateTime
+  revokedAt    DateTime?
+  project      DesignProject    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  feedback     CustomerFeedback[]
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  @@index([projectId, purpose])
+  @@index([expiresAt])
+}
+
+model CustomerFeedback {
+  id                    String               @id @default(cuid())
+  projectId             String
+  shareLinkId           String?
+  selectedImageId       String?
+  type                  CustomerFeedbackType
+  customerFirstName     String?
+  preferredDesignNote   String?
+  changeRequest         String?
+  approved              Boolean?
+  expectationMatch      Int?
+  purchaseIntention     Int?
+  finalProductSatisfaction Int?
+  finalDesignMatch      Int?
+  wouldOrderAgain       Int?
+  wouldRecommend        Int?
+  submittedAt           DateTime             @default(now())
+  project               DesignProject        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  shareLink             ShareLink?           @relation(fields: [shareLinkId], references: [id], onDelete: SetNull)
+  selectedImage         GeneratedImage?      @relation("FeedbackSelectedImage", fields: [selectedImageId], references: [id], onDelete: SetNull)
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
+
+  @@index([projectId, type])
+}
+
+model RevisionRound {
+  id               String          @id @default(cuid())
+  projectId        String
+  generatedImageId String?
+  roundNumber      Int
+  requestText      String?
+  ownerNotes       String?
+  project          DesignProject   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  generatedImage   GeneratedImage? @relation(fields: [generatedImageId], references: [id], onDelete: SetNull)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  @@unique([projectId, roundNumber])
+}
+
+model Order {
+  id              String        @id @default(cuid())
+  projectId       String        @unique
+  stage           OrderStage    @default(BRIEF)
+  approvedAt      DateTime?
+  productionStartedAt DateTime?
+  deliveredAt     DateTime?
+  repeatCustomer  Boolean       @default(false)
+  project         DesignProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model Questionnaire {
+  id          String                 @id @default(cuid())
+  title       String
+  status      QuestionnaireStatus    @default(DRAFT)
+  kind        QuestionnaireKind
+  creatorId   String
+  creator     User                   @relation("QuestionnaireCreator", fields: [creatorId], references: [id], onDelete: Restrict)
+  versions    QuestionnaireVersion[]
+  createdAt   DateTime               @default(now())
+  updatedAt   DateTime               @updatedAt
+
+  @@index([kind, status])
+}
+
+model QuestionnaireVersion {
+  id              String                  @id @default(cuid())
+  questionnaireId String
+  versionNumber   Int
+  publishedAt     DateTime?
+  questionnaire   Questionnaire           @relation(fields: [questionnaireId], references: [id], onDelete: Cascade)
+  sections        Section[]
+  responses       QuestionnaireResponse[]
+  createdAt       DateTime                @default(now())
+  updatedAt       DateTime                @updatedAt
+
+  @@unique([questionnaireId, versionNumber])
+}
+
+model Section {
+  id        String               @id @default(cuid())
+  versionId String
+  code      String
+  title     String
+  order     Int
+  version   QuestionnaireVersion @relation(fields: [versionId], references: [id], onDelete: Cascade)
+  questions Question[]
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+
+  @@unique([versionId, code])
+  @@index([versionId, order])
+}
+
+model Question {
+  id            String                @id @default(cuid())
+  sectionId     String
+  code          String
+  constructCode String?
+  type          QuestionType
+  order         Int
+  required      Boolean               @default(true)
+  reverseCoded  Boolean               @default(false)
+  options       Json?
+  skipLogic     Json?
+  section       Section               @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  translations  QuestionTranslation[]
+  answers       Answer[]
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+
+  @@unique([sectionId, code])
+  @@index([constructCode])
+}
+
+model QuestionTranslation {
+  id         String   @id @default(cuid())
+  questionId String
+  locale     Locale
+  text       String
+  helpText   String?
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([questionId, locale])
+}
+
+model QuestionnaireResponse {
+  id            String               @id @default(cuid())
+  participantId String
+  versionId     String
+  status        ResponseStatus       @default(IN_PROGRESS)
+  startedAt     DateTime             @default(now())
+  submittedAt   DateTime?
+  participant   ParticipantProfile   @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  version       QuestionnaireVersion @relation(fields: [versionId], references: [id], onDelete: Restrict)
+  answers       Answer[]
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+
+  @@unique([participantId, versionId])
+  @@index([status])
+}
+
+model Answer {
+  id          String                @id @default(cuid())
+  responseId  String
+  questionId  String
+  value       Json
+  autosavedAt DateTime              @default(now())
+  response    QuestionnaireResponse @relation(fields: [responseId], references: [id], onDelete: Cascade)
+  question    Question              @relation(fields: [questionId], references: [id], onDelete: Restrict)
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+
+  @@unique([responseId, questionId])
+}
+
+model InterviewOptIn {
+  id               String             @id @default(cuid())
+  participantId    String             @unique
+  willing          Boolean
+  preferredTime    String?
+  contactMethod    String?
+  participant      ParticipantProfile @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+}
+
+model Interview {
+  id            String             @id @default(cuid())
+  participantId String
+  scheduledAt   DateTime?
+  mode          InterviewMode
+  guide         String
+  notes         String?
+  participant   ParticipantProfile @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  transcripts   Transcript[]
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+
+  @@index([participantId, scheduledAt])
+}
+
+model Transcript {
+  id            String         @id @default(cuid())
+  interviewId   String
+  content       String
+  uploadedFileUrl String?
+  interview     Interview      @relation(fields: [interviewId], references: [id], onDelete: Cascade)
+  codedSegments CodedSegment[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Theme {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  codes       Code[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Code {
+  id            String         @id @default(cuid())
+  themeId       String
+  name          String
+  description   String?
+  theme         Theme          @relation(fields: [themeId], references: [id], onDelete: Cascade)
+  codedSegments CodedSegment[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@unique([themeId, name])
+}
+
+model CodedSegment {
+  id           String     @id @default(cuid())
+  transcriptId String
+  codeId       String
+  startOffset  Int
+  endOffset    Int
+  quote        String
+  memo         String?
+  transcript   Transcript @relation(fields: [transcriptId], references: [id], onDelete: Cascade)
+  code         Code       @relation(fields: [codeId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([codeId])
+}
+
+model AuditLog {
+  id          String      @id @default(cuid())
+  actorUserId String?
+  action      AuditAction
+  entityType  String
+  entityId    String?
+  metadata    Json?
+  actor       User?       @relation(fields: [actorUserId], references: [id], onDelete: SetNull)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([actorUserId, createdAt])
+  @@index([entityType, entityId])
+}

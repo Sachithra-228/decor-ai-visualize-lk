@@ -1,0 +1,25 @@
+{
+  "home": {
+    "eyebrow": "University of Moratuwa MBA research",
+    "title": "AI design visuals for Sri Lankan custom home decor businesses",
+    "intro": "Join a research platform that helps micro business owners turn customer ideas into clear visual concepts, share them for approval, and track business outcomes.",
+    "join": "Join the study",
+    "signIn": "Sign in",
+    "placeholder": "The next phases add public study pages, onboarding, the AI design studio, customer approvals, questionnaires, and analytics."
+  },
+  "auth": {
+    "signInTitle": "Sign in",
+    "signInIntro": "Access your secure research workspace.",
+    "registerTitle": "Create owner account",
+    "registerIntro": "Phase 1 creates the account. Eligibility and consent screens come next.",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Continue"
+  },
+  "language": {
+    "en": "EN",
+    "si": "SI",
+    "ta": "TA"
+  }
+}

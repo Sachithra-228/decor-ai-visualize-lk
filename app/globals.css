@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 42 45% 96%;
+    --foreground: 184 42% 13%;
+    --card: 40 55% 98%;
+    --card-foreground: 184 42% 13%;
+    --popover: 40 55% 98%;
+    --popover-foreground: 184 42% 13%;
+    --primary: 178 58% 24%;
+    --primary-foreground: 42 45% 96%;
+    --secondary: 15 58% 45%;
+    --secondary-foreground: 42 45% 96%;
+    --muted: 39 28% 88%;
+    --muted-foreground: 184 16% 36%;
+    --accent: 45 68% 48%;
+    --accent-foreground: 184 42% 13%;
+    --destructive: 0 74% 42%;
+    --destructive-foreground: 42 45% 96%;
+    --border: 35 25% 78%;
+    --input: 35 25% 78%;
+    --ring: 178 58% 24%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+
+  a,
+  button,
+  input,
+  select,
+  textarea {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+}
+
+@layer utilities {
+  .animate-fade-up {
+    animation: fade-up 700ms ease-out both;
+  }
+
+  .animate-soft-float {
+    animation: soft-float 6s ease-in-out infinite;
+  }
+
+  .reveal-delay-1 {
+    animation-delay: 120ms;
+  }
+
+  .reveal-delay-2 {
+    animation-delay: 240ms;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes soft-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
