@@ -8,14 +8,14 @@ import { navItems } from "@/lib/prototype-data";
 export function SiteHeader({ locale }: { locale: string }) {
   return (
     <header className="sticky top-0 z-30 border-b bg-background/90 backdrop-blur-xl">
-      <div className="mx-auto flex min-h-16 w-full max-w-7xl items-center justify-between gap-3 px-4">
-        <Link href={`/${locale}`} className="flex items-center">
-          <span className="relative block h-12 w-44 overflow-hidden sm:w-56">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-2 px-3 py-2 sm:min-h-16 sm:px-4">
+        <Link href={`/${locale}`} className="flex min-w-0 items-center">
+          <span className="relative block h-11 w-32 overflow-hidden sm:h-12 sm:w-56">
             <Image
               src="/images/sachini-ashnika-logo.png"
               alt="Sachini Ashnika"
               fill
-              sizes="224px"
+              sizes="(max-width: 640px) 144px, 224px"
               className="object-contain object-left"
               priority
             />
@@ -32,17 +32,17 @@ export function SiteHeader({ locale }: { locale: string }) {
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <Button asChild variant="outline" size="sm" className="hidden bg-card/70 md:inline-flex">
             <Link href={`/${locale}/researcher`}>
               <Microscope className="h-4 w-4" />
               Researcher
             </Link>
           </Button>
-          <Button asChild size="sm" className="shadow-sm">
+          <Button asChild size="sm" className="px-3 shadow-sm sm:px-4">
             <Link href={`/${locale}/owner`}>
               <LayoutDashboard className="h-4 w-4" />
-              Demo
+              <span className="hidden sm:inline">Demo</span>
             </Link>
           </Button>
           <LanguageSwitcher currentLocale={locale} />

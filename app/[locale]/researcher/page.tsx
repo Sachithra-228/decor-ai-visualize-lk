@@ -32,15 +32,15 @@ export default function ResearcherDashboardPage({
   return (
     <main className="min-h-screen">
       <SiteHeader locale={locale} />
-      <section className="mx-auto w-full max-w-7xl px-4 py-8">
+      <section className="mx-auto w-full max-w-7xl px-4 py-6 sm:py-8">
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-          <div className="flex items-start gap-4">
-            <span className="rounded-lg bg-primary p-3 text-primary-foreground">
+          <div className="flex items-start gap-3 sm:gap-4">
+            <span className="hidden rounded-lg bg-primary p-3 text-primary-foreground sm:block">
               <Microscope className="h-7 w-7" />
             </span>
             <div>
-              <p className="text-sm font-semibold uppercase tracking-wide text-secondary">Researcher prototype</p>
-              <h1 className="mt-2 text-4xl font-bold">Analytics, questionnaire, interviews, and exports</h1>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-secondary sm:text-sm sm:tracking-wide">Researcher prototype</p>
+              <h1 className="mt-2 text-3xl font-bold sm:text-4xl">Analytics, questionnaire, interviews, and exports</h1>
               <p className="mt-3 max-w-4xl text-muted-foreground">
                 Mock dashboards show how the final system will support pilot reliability checks, mixed-method sampling,
                 platform usage metrics, and SPSS-ready anonymous exports. All analysis labels are preliminary.
@@ -53,7 +53,7 @@ export default function ResearcherDashboardPage({
               alt="Research desk with analytics dashboard, questionnaires, notes, and decor samples"
               width={1536}
               height={1024}
-              className="aspect-[16/9] w-full object-cover"
+              className="aspect-[4/3] w-full object-cover sm:aspect-[16/9]"
               priority
             />
           </div>
@@ -66,9 +66,9 @@ export default function ResearcherDashboardPage({
         </div>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
-          <section className="rounded-lg border bg-card p-5 shadow-sm">
-            <h2 className="text-2xl font-bold">Recruitment progress</h2>
-            <div className="mt-5 h-72">
+          <section className="min-w-0 rounded-lg border bg-card p-4 shadow-sm sm:p-5">
+            <h2 className="text-xl font-bold sm:text-2xl">Recruitment progress</h2>
+            <div className="mt-5 h-64 sm:h-72">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={recruitment}>
                   <CartesianGrid strokeDasharray="3 3" />
@@ -82,9 +82,9 @@ export default function ResearcherDashboardPage({
             </div>
           </section>
 
-          <section className="rounded-lg border bg-card p-5 shadow-sm">
-            <h2 className="text-2xl font-bold">Usage and customer outcome trend</h2>
-            <div className="mt-5 h-72">
+          <section className="min-w-0 rounded-lg border bg-card p-4 shadow-sm sm:p-5">
+            <h2 className="text-xl font-bold sm:text-2xl">Usage and customer outcome trend</h2>
+            <div className="mt-5 h-64 sm:h-72">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={trend}>
                   <CartesianGrid strokeDasharray="3 3" />
@@ -99,14 +99,14 @@ export default function ResearcherDashboardPage({
           </section>
         </div>
 
-        <section className="mt-8 rounded-lg border bg-card p-5 shadow-sm">
-          <h2 className="text-2xl font-bold">Questionnaire builder preview</h2>
+        <section className="mt-8 rounded-lg border bg-card p-4 shadow-sm sm:p-5">
+          <h2 className="text-xl font-bold sm:text-2xl">Questionnaire builder preview</h2>
           <p className="mt-2 text-sm text-muted-foreground">
             Pilot and main versions can be published separately. Non-AI users skip usage items and answer intention/barrier items.
           </p>
           <div className="mt-5 flex flex-wrap gap-2">
             {questionnaireConstructs.map((construct) => (
-              <span key={construct} className="rounded-md border bg-background px-3 py-2 text-sm font-semibold">
+              <span key={construct} className="rounded-md border bg-background px-2.5 py-2 text-xs font-semibold sm:px-3 sm:text-sm">
                 {construct}
               </span>
             ))}
@@ -114,8 +114,8 @@ export default function ResearcherDashboardPage({
         </section>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <section className="rounded-lg border bg-card p-5 shadow-sm">
-            <h2 className="text-2xl font-bold">Preliminary statistics</h2>
+          <section className="rounded-lg border bg-card p-4 shadow-sm sm:p-5">
+            <h2 className="text-xl font-bold sm:text-2xl">Preliminary statistics</h2>
             <div className="mt-5 grid gap-3">
               {[
                 ["AIV -> PERF correlation", "r = 0.58, p < .01"],
@@ -134,12 +134,12 @@ export default function ResearcherDashboardPage({
             </p>
           </section>
 
-          <section className="rounded-lg border bg-card p-5 shadow-sm">
-            <h2 className="text-2xl font-bold">Interview management and coding</h2>
+          <section className="rounded-lg border bg-card p-4 shadow-sm sm:p-5">
+            <h2 className="text-xl font-bold sm:text-2xl">Interview management and coding</h2>
             <div className="mt-5 grid gap-3">
               {interviewThemes.map((theme) => (
                 <article key={theme.title} className="rounded-md border bg-background p-4">
-                  <div className="flex items-center justify-between gap-3">
+                  <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
                     <h3 className="font-semibold">{theme.title}</h3>
                     <span className="text-sm text-muted-foreground">{theme.quotes} quotes</span>
                   </div>

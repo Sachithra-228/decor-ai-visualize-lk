@@ -18,16 +18,16 @@ export default async function OwnerDashboardPage({
   return (
     <main className="min-h-screen">
       <SiteHeader locale={locale} />
-      <section className="mx-auto w-full max-w-7xl px-4 py-8">
+      <section className="mx-auto w-full max-w-7xl px-4 py-6 sm:py-8">
         <div className="grid gap-6 lg:grid-cols-[0.82fr_1.18fr] lg:items-center">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-wide text-secondary">Business owner prototype</p>
-            <h1 className="mt-2 text-4xl font-bold">AI Design Studio</h1>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-secondary sm:text-sm sm:tracking-wide">Business owner prototype</p>
+            <h1 className="mt-2 text-3xl font-bold sm:text-4xl">AI Design Studio</h1>
             <p className="mt-3 max-w-3xl text-muted-foreground">
               A mock workspace for creating customer projects, building briefs, generating designs,
               checking feasibility, sharing approvals, and tracking business performance.
             </p>
-            <Button asChild className="mt-6">
+            <Button asChild className="mt-6 w-full sm:w-auto">
               <Link href="/share/demo">
                 Open customer share page
                 <ArrowRight className="h-4 w-4" />
@@ -40,7 +40,7 @@ export default async function OwnerDashboardPage({
               alt="Design board with handmade decor samples, sketches, color swatches, and AI concept cards"
               width={1536}
               height={1024}
-              className="aspect-[16/9] w-full object-cover"
+              className="aspect-[4/3] w-full object-cover sm:aspect-[16/9]"
               priority
             />
           </div>
@@ -53,13 +53,13 @@ export default async function OwnerDashboardPage({
         </div>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-          <section className="rounded-lg border bg-card p-5 shadow-sm">
-            <div className="flex items-center justify-between gap-3">
+          <section className="rounded-lg border bg-card p-4 shadow-sm sm:p-5">
+            <div className="flex items-start justify-between gap-3">
               <div>
-                <h2 className="text-2xl font-bold">Customer brief builder</h2>
+                <h2 className="text-xl font-bold sm:text-2xl">Customer brief builder</h2>
                 <p className="mt-1 text-sm text-muted-foreground">Structured fields remove the need for prompt-writing skill.</p>
               </div>
-              <WandSparkles className="h-8 w-8 text-secondary" />
+              <WandSparkles className="hidden h-8 w-8 shrink-0 text-secondary sm:block" />
             </div>
             <div className="mt-5 grid gap-4 sm:grid-cols-2">
               {[
@@ -86,8 +86,8 @@ export default async function OwnerDashboardPage({
             </div>
           </section>
 
-          <section className="rounded-lg border bg-card p-5 shadow-sm">
-            <h2 className="text-2xl font-bold">Order tracking and feasibility</h2>
+          <section className="rounded-lg border bg-card p-4 shadow-sm sm:p-5">
+            <h2 className="text-xl font-bold sm:text-2xl">Order tracking and feasibility</h2>
             <div className="mt-5 grid gap-3">
               {[
                 ["Brief", "Completed", true],
@@ -115,8 +115,8 @@ export default async function OwnerDashboardPage({
         </div>
 
         <section className="mt-8">
-          <div className="flex items-center justify-between gap-3">
-            <h2 className="text-2xl font-bold">Generated design gallery</h2>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <h2 className="text-xl font-bold sm:text-2xl">Generated design gallery</h2>
             <div className="flex gap-2 text-sm text-muted-foreground">
               <Clock3 className="h-4 w-4" />
               Mock generation duration: 8.7s

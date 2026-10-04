@@ -18,7 +18,7 @@ export default async function RegisterPage({
         image="/images/hero-studio.png"
         imageAlt="Custom home decor studio"
       />
-      <section className="mx-auto w-full max-w-7xl px-4 py-14">
+      <section className="mx-auto w-full max-w-7xl px-4 py-10 sm:py-14">
         <div className="grid gap-4 md:grid-cols-4">
           {[
             ["Consent", "Voluntary participation, confidentiality, right to withdraw, secure storage."],
@@ -34,8 +34,8 @@ export default async function RegisterPage({
           ))}
         </div>
 
-        <section className="mt-10 rounded-lg border bg-card p-6 shadow-sm md:p-8">
-          <h2 className="text-2xl font-bold">Eligibility preview</h2>
+        <section className="mt-8 rounded-lg border bg-card p-5 shadow-sm sm:mt-10 sm:p-6 md:p-8">
+          <h2 className="text-xl font-bold sm:text-2xl">Eligibility preview</h2>
           <div className="mt-5 grid gap-3 md:grid-cols-2">
             {[
               ["Makes customized home decor products?", "Yes"],
@@ -51,7 +51,7 @@ export default async function RegisterPage({
               </div>
             ))}
           </div>
-          <Button asChild className="mt-6">
+          <Button asChild className="mt-6 w-full sm:w-auto">
             <Link href={`/${locale}/owner`}>
               Continue to owner demo
             </Link>

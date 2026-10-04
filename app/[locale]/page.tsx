@@ -36,7 +36,7 @@ export default async function LocaleHomePage({
     <main className="min-h-screen overflow-hidden">
       <SiteHeader locale={locale} />
 
-      <section className="relative min-h-[86vh] overflow-hidden border-b">
+      <section className="relative min-h-[calc(100svh-3.75rem)] overflow-hidden border-b sm:min-h-[86vh]">
         <Image
           src="/images/hero-studio.png"
           alt="Sri Lankan home decor studio with handcrafted products and design previews"
@@ -47,23 +47,23 @@ export default async function LocaleHomePage({
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/86 to-background/45" />
         <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-background to-transparent" />
 
-        <div className="relative mx-auto flex min-h-[86vh] w-full max-w-7xl items-center px-4 py-16">
+        <div className="relative mx-auto flex min-h-[calc(100svh-3.75rem)] w-full max-w-7xl items-center px-4 py-12 sm:min-h-[86vh] sm:py-16">
           <div className="max-w-3xl animate-fade-up">
-            <p className="text-sm font-bold uppercase tracking-[0.24em] text-secondary">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-secondary sm:text-sm sm:tracking-[0.24em]">
               University of Moratuwa MBA Research
             </p>
-            <h1 className="mt-5 text-4xl font-bold leading-tight md:text-6xl">
+            <h1 className="mt-5 text-3xl font-bold leading-tight sm:text-5xl md:text-6xl">
               AI design visualization for custom Sri Lankan home decor businesses
             </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
+            <p className="mt-5 max-w-2xl text-base leading-7 text-muted-foreground sm:mt-6 sm:text-lg sm:leading-8">
               A refined research prototype for visualizing customer briefs, improving design approval,
               and measuring performance outcomes for micro-scale home decor owners.
             </p>
-            <div className="mt-9 flex flex-wrap gap-3">
-              <Button asChild>
+            <div className="mt-8 grid gap-3 sm:mt-9 sm:flex sm:flex-wrap">
+              <Button asChild className="w-full sm:w-auto">
                 <Link href={`/${locale}/owner`}>Explore owner studio</Link>
               </Button>
-              <Button asChild variant="outline" className="bg-card/70">
+              <Button asChild variant="outline" className="w-full bg-card/70 sm:w-auto">
                 <Link href={`/${locale}/researcher`}>View research dashboard</Link>
               </Button>
             </div>
@@ -71,27 +71,27 @@ export default async function LocaleHomePage({
         </div>
       </section>
 
-      <section className="mx-auto grid w-full max-w-7xl gap-4 px-4 py-12 md:grid-cols-4">
+      <section className="mx-auto grid w-full max-w-7xl gap-4 px-4 py-10 sm:grid-cols-2 sm:py-12 lg:grid-cols-4">
         {studyStats.map((metric, index) => (
           <article
             key={metric.label}
             className={`animate-fade-up rounded-lg border p-5 shadow-sm ${colorBands[index]}`}
           >
             <p className="text-sm font-medium opacity-80">{metric.label}</p>
-            <p className="mt-3 text-4xl font-bold">{metric.value}</p>
+            <p className="mt-3 text-3xl font-bold sm:text-4xl">{metric.value}</p>
             <p className="mt-2 text-sm opacity-85">{metric.note}</p>
           </article>
         ))}
       </section>
 
       <section className="border-y bg-card/35">
-        <div className="mx-auto grid w-full max-w-7xl gap-10 px-4 py-16 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
+        <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-12 sm:py-16 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
           <div>
-            <p className="text-sm font-bold uppercase tracking-[0.24em] text-secondary">Research Platform</p>
-            <h2 className="mt-4 text-3xl font-bold leading-tight md:text-5xl">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-secondary sm:text-sm sm:tracking-[0.24em]">Research Platform</p>
+            <h2 className="mt-4 text-2xl font-bold leading-tight sm:text-3xl md:text-5xl">
               Official workflow, visual evidence, and research-ready outputs
             </h2>
-            <p className="mt-5 text-lg leading-8 text-muted-foreground">
+            <p className="mt-5 text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
               The landing page introduces the study as a credible academic and business tool, while the
               prototype pages show how data is collected across owner, customer, and researcher touchpoints.
             </p>
@@ -113,15 +113,15 @@ export default async function LocaleHomePage({
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-7xl px-4 py-16">
+      <section className="mx-auto w-full max-w-7xl px-4 py-12 sm:py-16">
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
-            <p className="text-sm font-bold uppercase tracking-[0.24em] text-secondary">Visual Study Flow</p>
-            <h2 className="mt-4 max-w-3xl text-3xl font-bold leading-tight md:text-5xl">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-secondary sm:text-sm sm:tracking-[0.24em]">Visual Study Flow</p>
+            <h2 className="mt-4 max-w-3xl text-2xl font-bold leading-tight sm:text-3xl md:text-5xl">
               A modern image-led journey from design brief to business insight
             </h2>
           </div>
-          <Button asChild variant="outline">
+          <Button asChild variant="outline" className="w-full md:w-auto">
             <Link href={`/${locale}/how-it-works`}>See how it works</Link>
           </Button>
         </div>
@@ -151,13 +151,13 @@ export default async function LocaleHomePage({
       </section>
 
       <section className="border-y bg-primary text-primary-foreground">
-        <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-16 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+        <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-12 sm:py-16 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <div>
-            <p className="text-sm font-bold uppercase tracking-[0.24em] opacity-75">Study Objectives</p>
-            <h2 className="mt-4 text-3xl font-bold leading-tight md:text-5xl">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] opacity-75 sm:text-sm sm:tracking-[0.24em]">Study Objectives</p>
+            <h2 className="mt-4 text-2xl font-bold leading-tight sm:text-3xl md:text-5xl">
               Built around the actual research model
             </h2>
-            <p className="mt-5 text-lg leading-8 opacity-85">
+            <p className="mt-5 text-base leading-7 opacity-85 sm:text-lg sm:leading-8">
               The interface reflects AI visualization use, technology adoption conditions, human-AI integration,
               and micro-business performance outcomes.
             </p>
@@ -178,7 +178,7 @@ export default async function LocaleHomePage({
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-7xl px-4 py-16">
+      <section className="mx-auto w-full max-w-7xl px-4 py-12 sm:py-16">
         <div className="grid overflow-hidden rounded-lg border bg-card shadow-sm lg:grid-cols-[1.05fr_0.95fr]">
           <Image
             src="/images/research-desk.png"
@@ -189,18 +189,18 @@ export default async function LocaleHomePage({
           />
           <div className="p-6 md:p-8">
             <p className="text-sm font-bold uppercase tracking-[0.24em] text-secondary">Review Prototype</p>
-            <h2 className="mt-4 text-3xl font-bold leading-tight">
+            <h2 className="mt-4 text-2xl font-bold leading-tight sm:text-3xl">
               Owner tools, customer approval, and researcher analytics in one experience
             </h2>
             <p className="mt-4 text-sm leading-6 text-muted-foreground">
               Explore the core screens for the business owner, customer share link, questionnaire logic,
               interview coding, analytics, and export concepts.
             </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Button asChild>
+            <div className="mt-6 grid gap-3 sm:flex sm:flex-wrap">
+              <Button asChild className="w-full sm:w-auto">
                 <Link href={`/${locale}/sign-in`}>Choose workspace</Link>
               </Button>
-              <Button asChild variant="outline">
+              <Button asChild variant="outline" className="w-full sm:w-auto">
                 <Link href="/share/demo">Customer share page</Link>
               </Button>
             </div>
